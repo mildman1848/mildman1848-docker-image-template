@@ -14,8 +14,8 @@ Reusable LinuxServer.io-inspired Docker image template for self-built homelab im
 
 This repository is the **template**. Real images live in their own repositories, for example:
 
-- `postgresql-lsio`
-- `mariadb-lsio`
+- `postgresql`
+- `mariadb`
 
 PostgreSQL and MariaDB are deliberately not kept under `examples/`; they are validation projects and future standalone image repos.
 
@@ -41,3 +41,13 @@ Docker and Hadolint are expected for full verification. Template static checks r
 ```bash
 make lint
 ```
+
+
+## Standalone image repositories
+
+The pilot images now live in standalone repositories named after the image:
+
+- `postgresql`
+- `mariadb`
+
+Repository names match the image names. LSIO-style behavior is documented in the image metadata and README instead.

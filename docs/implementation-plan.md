@@ -27,25 +27,25 @@ docker run --rm hello-world
 ## Task 2: Build PostgreSQL pilot locally
 
 ```bash
-IMAGE_NAME=postgresql-lsio IMAGE_TAG=dev DOCKERFILE=examples/postgresql/Dockerfile CONTEXT=examples/postgresql PLATFORMS=linux/amd64 ./scripts/buildx-build.sh --load
+IMAGE_NAME=postgresql IMAGE_TAG=dev DOCKERFILE=examples/postgresql/Dockerfile CONTEXT=examples/postgresql PLATFORMS=linux/amd64 ./scripts/buildx-build.sh --load
 ```
 
 ## Task 3: Smoke-test PostgreSQL
 
 ```bash
-./examples/postgresql/smoke-test.sh postgresql-lsio:dev
+./examples/postgresql/smoke-test.sh postgresql:dev
 ```
 
 ## Task 4: Build MariaDB pilot locally
 
 ```bash
-IMAGE_NAME=mariadb-lsio IMAGE_TAG=dev DOCKERFILE=examples/mariadb/Dockerfile CONTEXT=examples/mariadb PLATFORMS=linux/amd64 ./scripts/buildx-build.sh --load
+IMAGE_NAME=mariadb IMAGE_TAG=dev DOCKERFILE=examples/mariadb/Dockerfile CONTEXT=examples/mariadb PLATFORMS=linux/amd64 ./scripts/buildx-build.sh --load
 ```
 
 ## Task 5: Smoke-test MariaDB
 
 ```bash
-./examples/mariadb/smoke-test.sh mariadb-lsio:dev
+./examples/mariadb/smoke-test.sh mariadb:dev
 ```
 
 ## Task 6: Enable registry publishing

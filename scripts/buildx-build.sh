@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMAGE_NAME="${IMAGE_NAME:?Set IMAGE_NAME, e.g. ghcr.io/mildman1848/postgresql-lsio}"
+IMAGE_NAME="${IMAGE_NAME:?Set IMAGE_NAME, e.g. ghcr.io/mildman1848/postgresql}"
 IMAGE_TAG="${IMAGE_TAG:-dev}"
 DOCKERFILE="${DOCKERFILE:-Dockerfile}"
 CONTEXT="${CONTEXT:-.}"
