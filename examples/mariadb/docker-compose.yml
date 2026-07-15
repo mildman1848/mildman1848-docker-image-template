@@ -1,0 +1,26 @@
+services:
+  mariadb:
+    image: ${IMAGE_NAME:-mariadb-lsio}:${IMAGE_TAG:-dev}
+    container_name: mariadb-lsio
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-Europe/Berlin}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USER:-app}
+      FILE__MYSQL_PASSWORD: /run/secrets/mysql_password
+      FILE__MYSQL_ROOT_PASSWORD: /run/secrets/mysql_root_password
+    secrets:
+      - mysql_password
+      - mysql_root_password
+    volumes:
+      - ./config:/config
+    ports:
+      - "127.0.0.1:3306:3306"
+
+secrets:
+  mysql_password:
+    file: ./secrets/mysql_password.txt
+  mysql_root_password:
+    file: ./secrets/mysql_root_password.txt
