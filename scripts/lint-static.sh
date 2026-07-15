@@ -22,10 +22,20 @@ done < <(find . -type f \
   ! -path './secrets/*' \
   -print0)
 
+check_world_executable() {
+  local file="$1"
+  local mode
+  mode="$(stat -c '%a' "$file")"
+  if (( (8#$mode & 0005) != 0005 )); then
+    echo "ERROR: runtime script must be readable/executable by abc (suggest 0755): $file mode=$mode" >&2
+    fail=1
+  fi
+}
+
 if [[ -d root/etc/s6-overlay/s6-rc.d ]]; then
   while IFS= read -r -d '' service_dir; do
     name="$(basename "$service_dir")"
-    [[ "$name" == "user" || "$name" == "dependencies.d" || "$name" == "contents.d" ]] && continue
+    [[ "$name" == "user" || "$name" == "user2" || "$name" == "dependencies.d" || "$name" == "contents.d" ]] && continue
     if [[ ! -f "$service_dir/type" ]]; then
       echo "ERROR: missing type in $service_dir" >&2
       fail=1
@@ -35,9 +45,11 @@ if [[ -d root/etc/s6-overlay/s6-rc.d ]]; then
     case "$type_value" in
       oneshot)
         [[ -f "$service_dir/up" || -f "$service_dir/run" ]] || { echo "ERROR: oneshot without up/run: $service_dir" >&2; fail=1; }
+        [[ ! -f "$service_dir/run" || -x "$service_dir/run" ]] || { echo "ERROR: oneshot run is not executable: $service_dir/run" >&2; fail=1; }
         ;;
       longrun)
         [[ -x "$service_dir/run" ]] || { echo "ERROR: longrun without executable run: $service_dir" >&2; fail=1; }
+        check_world_executable "$service_dir/run"
         ;;
       bundle)
         ;;
@@ -47,6 +59,17 @@ if [[ -d root/etc/s6-overlay/s6-rc.d ]]; then
         ;;
     esac
   done < <(find root/etc/s6-overlay/s6-rc.d -mindepth 1 -maxdepth 1 -type d -print0)
+fi
+
+if [[ -d root/usr/local/bin ]]; then
+  while IFS= read -r -d '' file; do
+    case "$file" in
+      */start-*|*/app-*|*/healthcheck|*/dummy-*|*/file-env)
+        [[ -x "$file" ]] || { echo "ERROR: runtime helper is not executable: $file" >&2; fail=1; }
+        check_world_executable "$file"
+        ;;
+    esac
+  done < <(find root/usr/local/bin -maxdepth 1 -type f -print0)
 fi
 
 if command -v hadolint >/dev/null 2>&1; then

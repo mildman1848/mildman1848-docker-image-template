@@ -55,13 +55,15 @@ linux/amd64,linux/arm64
 | `make trivy-scan` / `make scan` | Run Trivy image scan for the built image. |
 | `make sbom` | Generate a Syft SBOM artifact under `sbom/`. |
 
-When using `sudo docker` locally, pass the same Docker command into targets:
+When using `sudo docker` locally, pass matching privileges to Docker-backed scanners as well:
 
 ```bash
 make build DOCKER='sudo docker'
-make security-scan DOCKER='sudo docker'
-make sbom DOCKER='sudo docker'
+make security-scan DOCKER='sudo docker' TRIVY='sudo trivy'
+make sbom DOCKER='sudo docker' SYFT='sudo syft'
 ```
+
+Local `buildx --load` builds intentionally skip provenance/SBOM attestations because the classic Docker driver does not support attestations. Registry/CI push builds should keep attestations enabled.
 
 ## Container operation targets
 

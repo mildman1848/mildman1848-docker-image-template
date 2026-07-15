@@ -24,6 +24,17 @@ This template adopts the useful security/SBOM ideas from the older `audiobookshe
 - Never print secret values to stdout, logs, CI summaries, or README examples.
 - Support LSIO-style `FILE__` variables in derived images.
 
+## LSIO-specific scanner notes
+
+Trivy rule `DS-0002` recommends a final Dockerfile `USER`. For LSIO/s6 images this is intentionally not used: `/init` and s6 initialization need root, then the final long-running app process must drop to `abc` with `s6-setuidgid abc`. Treat this as a documented LSIO exception, not as permission to run the application as root.
+
+When the local Docker socket requires sudo, image scanners need matching privileges:
+
+```bash
+make security-scan DOCKER='sudo docker' TRIVY='sudo trivy'
+make sbom DOCKER='sudo docker' SYFT='sudo syft'
+```
+
 ## Recommended image-repo checks
 
 Database and service images should extend smoke tests beyond "container started":
