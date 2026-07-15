@@ -11,6 +11,8 @@ secrets/
 *.tar
 *.sbom.json
 *.sarif
+__pycache__/
+*.py[cod]
 
 # OS/editor
 .DS_Store
