@@ -9,6 +9,7 @@ LinuxServer.io-inspired Docker image template for self-built homelab images.
 - Use s6-overlay v3 service supervision via LinuxServer.io baseimages.
 - Publish to GHCR and Docker Hub first; keep GitLab/Codeberg mirroring deployable.
 - Support broad multi-architecture builds, including Raspberry Pi where upstream packages allow it.
+- Use `make` for repeatable local workflows such as secure secret generation, linting, builds, and smoke tests.
 
 ## Pilot images
 
@@ -28,12 +29,24 @@ LinuxServer.io-inspired Docker image template for self-built homelab images.
 ## Quick start
 
 ```bash
+# show available commands
+make help
+
+# generate local Docker secret files without printing values
+make secrets
+
 # lint static files
-scripts/lint-static.sh
+make lint
 
 # build one pilot image on a Docker-capable host
-IMAGE_NAME=ghcr.io/mildman1848/postgresql-lsio IMAGE_TAG=dev DOCKERFILE=examples/postgresql/Dockerfile CONTEXT=examples/postgresql PLATFORMS=linux/amd64,linux/arm64,linux/arm/v7 ./scripts/buildx-build.sh
+IMAGE_TAG=dev PLATFORMS=linux/amd64 make build-postgresql
 ```
+
+## Secret handling
+
+See `docs/secrets.md`.
+
+Default secrets are generated with Python's `secrets` module, 96 alphanumeric characters, mode `0600`, and no overwrite unless `FORCE=1` is set.
 
 ## Licensing summary
 
