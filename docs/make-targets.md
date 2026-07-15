@@ -1,6 +1,6 @@
 # Proposed Make Targets
 
-These targets are recommended for all image repositories. The current baseline already includes `lint`, `build`, `smoke`, `secrets`, and `clean-secrets`.
+These targets are implemented/recommended for all image repositories. The current image repositories implement the high-value targets listed below. The template repository implements setup, check-tools, lint, secret, and clean.
 
 ## High-value next targets
 
