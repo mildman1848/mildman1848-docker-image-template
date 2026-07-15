@@ -53,3 +53,8 @@ Prefer in this order:
 4. Full source build, only when required.
 
 For PostgreSQL and MariaDB pilots, the initial template uses Alpine packages inside the LSIO Alpine base because wrapping official database images into an s6/LSIO runtime is more fragile than useful.
+
+
+## Current LSIO Alpine 3.24 platform signal
+
+`ghcr.io/linuxserver/baseimage-alpine:3.24` currently builds successfully for `linux/amd64` and `linux/arm64` in CI. `linux/arm/v7` fails with `no match for platform in manifest`, so 32-bit Raspberry Pi support must remain best-effort until a compatible base image is selected.
