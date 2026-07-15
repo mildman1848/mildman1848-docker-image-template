@@ -1,58 +1,43 @@
-# Milde Docker Image Template
+# mildman1848 Docker Image Template
 
-LinuxServer.io-inspired Docker image template for self-built homelab images.
+Reusable LinuxServer.io-inspired Docker image template for self-built homelab images.
 
 ## Goals
 
-- Build our own images with a consistent LinuxServer.io-style runtime.
-- Prefer upstream application artifacts/images when compatible.
-- Use s6-overlay v3 service supervision via LinuxServer.io baseimages.
-- Publish to GHCR and Docker Hub first; keep GitLab/Codeberg mirroring deployable.
-- Support broad multi-architecture builds, including Raspberry Pi where upstream packages allow it.
-- Use `make` for repeatable local workflows such as secure secret generation, linting, builds, and smoke tests.
+- Consistent LinuxServer.io-style runtime foundation.
+- s6-overlay v3 supervision patterns.
+- Secure `make` workflows for secrets and local automation.
+- Reusable GitHub Actions workflow for multiarch Docker builds.
+- Registry strategy: GHCR and Docker Hub first; GitLab/Codeberg registries after PostgreSQL and MariaDB are proven.
 
-## Pilot images
+## What this repo is
 
-- `examples/postgresql`
-- `examples/mariadb`
+This repository is the **template**. Real images live in their own repositories, for example:
 
-## Architecture policy
+- `postgresql-lsio`
+- `mariadb-lsio`
 
-| Tier | Platforms | Policy |
-|---|---|---|
-| Tier 1 | `linux/amd64`, `linux/arm64` | Required for all images. |
-| Tier 2 | `linux/arm/v7` | Required when upstream/runtime packages support it; Raspberry Pi 2/3/4 32-bit target. |
-| Tier 3 | `linux/arm/v6`, `linux/386`, `linux/ppc64le`, `linux/s390x` | Best effort only; many modern upstream images/packages do not support these. |
-
-**Reality note:** "Compatible with everything" is a goal, not a magic spell. Modern database engines and baseimages often drop older 32-bit targets. We record support explicitly per image instead of pretending.
+PostgreSQL and MariaDB are deliberately not kept under `examples/`; they are validation projects and future standalone image repos.
 
 ## Quick start
 
 ```bash
-# show available commands
 make help
-
-# generate local Docker secret files without printing values
-make secrets
-
-# lint static files
 make lint
-
-# build one pilot image on a Docker-capable host
-IMAGE_TAG=dev PLATFORMS=linux/amd64 make build-postgresql
+make secret SECRET_NAME=secrets/my_service_password.txt
 ```
 
-## Secret handling
+## Design docs
 
-See `docs/secrets.md`.
+- `docs/architecture.md`
+- `docs/secrets.md`
+- `docs/licensing.md`
+- `docs/implementation-plan.md`
 
-Default secrets are generated with Python's `secrets` module, 96 alphanumeric characters, mode `0600`, and no overwrite unless `FORCE=1` is set.
+## Current local verification
 
-## Licensing summary
+Docker and Hadolint are expected for full verification. Template static checks run through:
 
-See `docs/licensing.md`.
-
-- PostgreSQL: permissive PostgreSQL License-style copyright notice; redistribution generally compatible.
-- MariaDB Server: GPL-2.0; redistribution is allowed but source/license obligations must be respected.
-
-This is not legal advice. It is a homelab build system, not a law firm wearing a Docker logo.
+```bash
+make lint
+```
