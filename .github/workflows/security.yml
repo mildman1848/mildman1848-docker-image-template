@@ -26,12 +26,19 @@ jobs:
         with:
           scan-type: config
           scan-ref: .
-          format: sarif
-          output: trivy-config.sarif
+          format: table
           severity: HIGH,CRITICAL
           exit-code: '0'
 
-      - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-config.sarif
+  sbom-template-check:
+    name: SBOM tooling check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0.20.7
+
+      - name: Verify Syft is available
+        run: syft version

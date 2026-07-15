@@ -17,7 +17,7 @@ on:
       platforms:
         required: false
         type: string
-        default: linux/amd64,linux/arm64,linux/arm/v7
+        default: linux/amd64,linux/arm64
       push:
         required: false
         type: boolean
@@ -29,7 +29,7 @@ on:
       image_revision:
         required: false
         type: string
-        default: mld1
+        default: mldm1
       gitlab_image:
         required: false
         type: string

@@ -1,8 +1,26 @@
-# Registry Publishing
+# Registry Publishing and Git Mirrors
 
-Publishing is enabled only after local build and smoke tests pass.
+Publishing and mirroring are separate concerns.
 
-## Current targets
+## Git mirrors
+
+This template includes the current `mirror.yml` workflow:
+
+```text
+GitHub main/tags → Codeberg main/tags
+GitHub main/tags → GitLab main/tags
+```
+
+Required GitHub repository secrets:
+
+```text
+CODEBERG_MIRROR_SSH_KEY
+GITLAB_MIRROR_SSH_KEY
+```
+
+These are private SSH keys used only by the mirror workflow. Do not print them, commit them, or reuse them as application secrets.
+
+## Container registries
 
 | Registry | Status | Image pattern |
 |---|---|---|
@@ -11,25 +29,32 @@ Publishing is enabled only after local build and smoke tests pass.
 | GitLab Registry | optional | `registry.gitlab.com/mildman1848/<image>` |
 | Codeberg/Forgejo Registry | optional, verify exact package path before first push | `codeberg.org/mildman1848/<image>` |
 
-## Required secrets
+## Registry secrets
 
 Docker Hub:
 
-- `DOCKERHUB_USERNAME`
-- `DOCKERHUB_TOKEN`
+```text
+DOCKERHUB_USERNAME
+DOCKERHUB_TOKEN
+```
 
-GitLab:
+GitLab Registry:
 
-- `GITLAB_REGISTRY_USER`
-- `GITLAB_REGISTRY_TOKEN`
+```text
+GITLAB_REGISTRY_USER
+GITLAB_REGISTRY_TOKEN
+```
 
-Codeberg:
+Codeberg/Forgejo Registry:
 
-- `CODEBERG_REGISTRY_USER`
-- `CODEBERG_REGISTRY_TOKEN`
+```text
+CODEBERG_REGISTRY_USER
+CODEBERG_REGISTRY_TOKEN
+```
 
 ## Safety policy
 
 - Pull requests build but do not push.
 - Manual `workflow_dispatch` with `push=true` is required for publishing.
-- PostgreSQL and MariaDB must pass local smoke tests before enabling additional registry pushes.
+- Local lint/build/smoke/security checks must pass before registry push.
+- Git mirrors may run automatically after pushes to `main` because they copy Git state only; registry publishing creates public artifacts and stays explicit.

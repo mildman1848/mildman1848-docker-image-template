@@ -1,38 +1,45 @@
-# Versioning Policy
+# Versioning
 
-Image versions follow a LinuxServer.io-inspired pattern while making the upstream version explicit.
-
-## Format
+Images use an LSIO-inspired combined version: preserve the upstream application version and add a local packaging revision.
 
 ```text
-<upstream-version>-mld<N>
+<upstream-version>-mldm<N>
 ```
 
 Examples:
 
 ```text
-16.14-mld1
-11.8.8-mld1
+16.14-mldm1
+11.8.8-mldm2
 ```
 
-## Meaning
+## Components
 
-| Part | Meaning |
+| Component | Meaning |
 |---|---|
-| `<upstream-version>` | Version of the packaged upstream application or package. |
-| `mld<N>` | Our image packaging revision for that upstream version. |
+| `<upstream-version>` | Version from the upstream application/package. |
+| `mldm<N>` | Local image packaging revision for that upstream version. |
 
-## When to bump
+`Mildman1848` is allowed as the public namespace/brand. Private household names must not appear in public artifacts.
 
-- Upstream package/application changes: bump `<upstream-version>` and reset `mld1`.
-- Packaging-only changes with the same upstream version: bump `mld<N>`.
-- Security/baseimage-only rebuild with no functional packaging change: bump `mld<N>` if republished.
+## Bump rules
+
+- Upstream package/application changes: bump `<upstream-version>` and reset to `mldm1`.
+- Packaging-only changes with the same upstream version: increment `mldm<N>`.
+- Security/baseimage-only rebuild that creates a republished artifact: increment `mldm<N>`.
 
 ## Labels
 
-Images should include:
+Derived repos should expose:
 
-- `org.opencontainers.image.version=<upstream-version>-mld<N>`
-- `APP_VERSION=<upstream-version>`
-- `IMAGE_REVISION=mld<N>`
-- LSIO-style `build_version` with upstream and image revision details.
+```text
+org.opencontainers.image.version=<upstream-version>-mldm<N>
+org.opencontainers.image.revision=<git-sha>
+IMAGE_REVISION=mldm<N>
+APP_VERSION=<upstream-version>
+VERSION=<upstream-version>-mldm<N>
+```
+
+## Pitfall
+
+Do not use shortened legacy variants of the packaging suffix. The project standard is explicitly `mldm<N>`.
