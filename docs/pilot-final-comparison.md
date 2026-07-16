@@ -8,7 +8,7 @@ This document compares the two pilot image repositories against the current mast
 
 | Repository | Local path | Revision | Remote sync |
 |---|---|---:|---|
-| Master template | `/home/captain/workspace/mildman1848-docker-image-template` | `a9c250b` | GitHub, Codeberg, GitLab synced |
+| Master template | `/home/captain/workspace/mildman1848-docker-image-template` | latest `main` report commit | GitHub, Codeberg, GitLab synced |
 | PostgreSQL | `/home/captain/workspace/postgresql` | `ad5c850` | GitHub, Codeberg, GitLab synced |
 | MariaDB | `/home/captain/workspace/mariadb` | `a083f1a` | GitHub, Codeberg, GitLab synced |
 
